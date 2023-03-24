@@ -1,5 +1,6 @@
 import pandas as pd
 from pymongo import MongoClient
+import json
 
 dades_cp = []
 dades_p = []
@@ -14,30 +15,10 @@ dades_editorials = dades_cp[['NomEditorial','resposable','adreca','pais']].drop_
 dades_artistes = dades_a.drop_duplicates().reset_index(drop=True)
 dades_colleccions = dades_cp[['NomColleccio','genere','idioma','any_inici',
                               'any_fi','tancada']].drop_duplicates().reset_index(drop=True)
+dades_publicacions = dades_cp[['ISBN',	'titol','stock','autor','preu',	'num_pagines','guionistes','dibuixants']]
 
-# TODO
-ll = []
-for row in dades_colleccions.itertuples():
-    ll.append(row)
-print(ll)
-
-"""
-# En execucio remota
-Host = 'localhost' 
-Port = 27017
-
-# Connexio
-DSN = "mongodb://{}:{}".format(Host,Port)
-conn = MongoClient(DSN)
-
-# Seleccio de la base de dades
-db = conn['llibreria']
-
-# Insercio de les dades a MongoDB
-db['editorials'].insert_many(dades_editorials)
-db['artistes'].insert_many(artistes_data)
-db['colleccions'].insert_many(colleccions_data)
-db['publicacions'].insert_many(publicacions_data)
-
-conn.close()
-"""
+df_extra = pd.merge(dades_publicacions, dades_p, left_on='ISBN', right_on='isbn')
+df_extra['personatges'] = df_extra[dades_p.columns[:2]].apply(lambda x: json.dumps(dict(x)), axis=1)
+list_p = df_extra.groupby('ISBN')['personatges'].apply(list)
+dades_publicacions = dades_publicacions.merge(list_p, on='ISBN')
+dades_publicacions.head()
