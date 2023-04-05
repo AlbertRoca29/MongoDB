@@ -11,6 +11,7 @@ dades_cp = pd.read_excel('Dades.xlsx', sheet_name='Colleccions-Publicacions')
 dades_p = pd.read_excel('Dades.xlsx', sheet_name='Personatges')
 dades_a = pd.read_excel('Dades.xlsx', sheet_name='Artistes')
 
+
 dades_editorials = dades_cp[['NomEditorial','resposable','adreca','pais']].drop_duplicates().reset_index(drop=True)
 
 dades_artistes = dades_a.drop_duplicates().reset_index(drop=True)
@@ -20,12 +21,14 @@ dades_colleccions = dades_cp[['NomColleccio','genere','idioma','any_inici',
 
 dades_publicacions = dades_cp[['ISBN','titol','stock','autor','preu', 'num_pagines', 'guionistes', 'dibuixants', 'NomColleccio']]
 
-df_extra = pd.merge(dades_publicacions, dades_p, left_on='ISBN', right_on='isbn')
+
+# what.fillna('unknown', inplace=True)
+df_extra = pd.merge(dades_publicacions, dades_p, left_on='ISBN', right_on='isbn',how='outer')
+print(df_extra)
 df_extra['personatges'] = df_extra[dades_p.columns[:2]].apply(lambda x: json.dumps(dict(x)), axis=1)
 list_p = df_extra.groupby('ISBN')['personatges'].apply(list)
 dades_publicacions = dades_publicacions.merge(list_p, on='ISBN')
-
-
+# print(dades_publicacions)
 
 dades_editorials = dades_editorials.to_dict('records')
 dades_artistes = dades_artistes.to_dict('records')
@@ -37,16 +40,19 @@ for i,publicacio in enumerate(dades_publicacions):
     new_publicacio = []
     #print(publicacio['personatges'])
     for posicio in publicacio['personatges']:
-        posicio = eval(posicio)
-        new_publicacio.append(posicio)
-    #print(new_publicacio)
-    
-    dades_publicacions[i]['personatges'] = new_publicacio
-    print(dades_publicacions[i]['personatges'])
+        if(posicio[8:11]!='NaN'):
+            posicio = eval(posicio)
+            new_publicacio.append(posicio)
+
+    if(len(new_publicacio)>0):
+        dades_publicacions[i]['personatges'] = new_publicacio
+    else: 
+        del dades_publicacions[i]['personatges']
     
     
 # Llistes
 for doc in dades_publicacions:
+    
     for key, value in doc.items():
         if isinstance(value, str) and '[' in value and ']' in value:
             doc[key] = value.strip('][').split(', ')
