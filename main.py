@@ -25,23 +25,14 @@ df_extra['personatges'] = df_extra[dades_p.columns[:2]].apply(lambda x: json.dum
 list_p = df_extra.groupby('ISBN')['personatges'].apply(list)
 dades_publicacions = dades_publicacions.merge(list_p, on='ISBN')
 
-# Passem els Pandas Dataframe a JSON
-"""
-dades_editorials = dades_editorials.to_json(force_ascii=False, orient='records')
-dades_artistes = dades_artistes.to_json(force_ascii=False, orient='records')
-dades_colleccions = dades_colleccions.to_json(force_ascii=False, orient='records')
-dades_publicacions = dades_publicacions.to_json(force_ascii=False, orient='records')
-"""
-#dades_editorials = json.loads(dades_editorials).values()
-#dades_artistes = json.loads(dades_artistes).values()
-#dades_colleccions = json.loads(dades_colleccions).values()
-#dades_publicacions = json.loads(dades_publicacions).values()
+
 
 dades_editorials = dades_editorials.to_dict('records')
 dades_artistes = dades_artistes.to_dict('records')
 dades_colleccions = dades_colleccions.to_dict('records')
 dades_publicacions = dades_publicacions.to_dict('records')
 
+# Diccionaris
 for i,publicacio in enumerate(dades_publicacions):
     new_publicacio = []
     #print(publicacio['personatges'])
@@ -52,6 +43,13 @@ for i,publicacio in enumerate(dades_publicacions):
     
     dades_publicacions[i]['personatges'] = new_publicacio
     print(dades_publicacions[i]['personatges'])
+    
+    
+# Llistes
+for doc in dades_publicacions:
+    for key, value in doc.items():
+        if isinstance(value, str) and '[' in value and ']' in value:
+            doc[key] = value.strip('][').split(', ')
 
 
 
