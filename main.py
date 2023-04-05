@@ -24,7 +24,6 @@ df_extra = pd.merge(dades_publicacions, dades_p, left_on='ISBN', right_on='isbn'
 df_extra['personatges'] = df_extra[dades_p.columns[:2]].apply(lambda x: json.dumps(dict(x)), axis=1)
 list_p = df_extra.groupby('ISBN')['personatges'].apply(list)
 dades_publicacions = dades_publicacions.merge(list_p, on='ISBN')
-print(dades_publicacions)
 
 # Passem els Pandas Dataframe a JSON
 """
@@ -42,6 +41,19 @@ dades_editorials = dades_editorials.to_dict('records')
 dades_artistes = dades_artistes.to_dict('records')
 dades_colleccions = dades_colleccions.to_dict('records')
 dades_publicacions = dades_publicacions.to_dict('records')
+
+for i,publicacio in enumerate(dades_publicacions):
+    new_publicacio = []
+    #print(publicacio['personatges'])
+    for posicio in publicacio['personatges']:
+        posicio = eval(posicio)
+        new_publicacio.append(posicio)
+    #print(new_publicacio)
+    
+    dades_publicacions[i]['personatges'] = new_publicacio
+    print(dades_publicacions[i]['personatges'])
+
+
 
 # En execucio remota
 Host = 'localhost' 
