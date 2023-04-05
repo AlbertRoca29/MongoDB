@@ -51,6 +51,10 @@ for doc in dades_publicacions:
         if isinstance(value, str) and '[' in value and ']' in value:
             doc[key] = value.strip('][').split(', ')
 
+for doc in dades_colleccions:
+    for key, value in doc.items():
+        if isinstance(value, str) and '[' in value and ']' in value:
+            doc[key] = value.strip('][').split(', ')
 
 
 # En execucio remota
