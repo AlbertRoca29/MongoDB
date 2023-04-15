@@ -17,9 +17,9 @@ dades_editorials = dades_cp[['NomEditorial','resposable','adreca','pais']].drop_
 dades_artistes = dades_a.drop_duplicates().reset_index(drop=True)
 
 dades_colleccions = dades_cp[['NomColleccio','genere','idioma','any_inici',
-                              'any_fi','tancada', 'NomEditorial']].drop_duplicates().reset_index(drop=True)
+                              'any_fi','tancada']].drop_duplicates().reset_index(drop=True)
 
-dades_publicacions = dades_cp[['ISBN','titol','stock','autor','preu', 'num_pagines', 'guionistes', 'dibuixants', 'NomColleccio']]
+dades_publicacions = dades_cp[['ISBN','titol','stock','autor','preu', 'num_pagines', 'guionistes', 'dibuixants', 'NomColleccio', 'NomEditorial']]
 
 
 # what.fillna('unknown', inplace=True)
