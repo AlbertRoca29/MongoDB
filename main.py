@@ -62,6 +62,13 @@ for doc in dades_colleccions:
         if isinstance(value, str) and '[' in value and ']' in value:
             doc[key] = value.strip('][').split(', ')
 
+# filtrar any_fi
+for i,doc in enumerate(dades_colleccions):
+    if doc['tancada'] == False:
+        del dades_colleccions[i]['any_fi']
+    else:
+        dades_colleccions[i]['any_fi'] = int(dades_colleccions[i]['any_fi'])
+
 
 # En execucio remota
 Host = 'localhost' 
