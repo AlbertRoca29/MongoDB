@@ -1,4 +1,4 @@
-# Projecte MongoDB Bases de Dades No Relacionals 
+##  Projecte MongoDB Bases de Dades No Relacionals 
 
 <div style="display:flex; justify-content: space-between;">
   <img src="https://static1.srcdn.com/wordpress/wp-content/uploads/2019/11/TBBT-Comic-Book-Store-Header.jpg" alt="The Big Bang Theory Comic Book Store" width="54%" />
