@@ -13,7 +13,7 @@ dades_editorials = dades_cp[['NomEditorial','resposable','adreca','pais']
 
 dades_artistes = dades_a.to_dict('records')
 
-dades_colleccions = dades_cp[['NomColleccio','genere','idioma','any_inici','any_fi','tancada']
+dades_colleccions = dades_cp[['NomColleccio','NomEditorial','genere','idioma','any_inici','any_fi','tancada']
                              ].drop_duplicates().reset_index(drop=True).to_dict('records')
 
 dades_publicacions = dades_cp[['ISBN','titol','stock','autor','preu','num_pagines',
